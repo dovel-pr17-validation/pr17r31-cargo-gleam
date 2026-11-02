@@ -1,0 +1,21 @@
+---
+source: compiler-core/src/javascript/tests/tuples.rs
+expression: "\npub const e = #(\n  \"loooooooooooooong\", \"loooooooooooong\", \"loooooooooooooong\",\n  \"loooooooooooooong\", \"loooooooooooong\", \"loooooooooooooong\",\n)\n"
+---
+----- SOURCE CODE
+
+pub const e = #(
+  "loooooooooooooong", "loooooooooooong", "loooooooooooooong",
+  "loooooooooooooong", "loooooooooooong", "loooooooooooooong",
+)
+
+
+----- COMPILED JAVASCRIPT
+export const e = [
+  "loooooooooooooong",
+  "loooooooooooong",
+  "loooooooooooooong",
+  "loooooooooooooong",
+  "loooooooooooong",
+  "loooooooooooooong",
+];

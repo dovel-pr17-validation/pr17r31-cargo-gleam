@@ -1,0 +1,39 @@
+---
+source: compiler-core/src/erlang/tests/bit_arrays.rs
+expression: "pub fn main() {\n  let a = 1\n  let assert <<b, 1>> = <<1, a>>\n  b\n}\n"
+---
+----- SOURCE CODE
+pub fn main() {
+  let a = 1
+  let assert <<b, 1>> = <<1, a>>
+  b
+}
+
+
+----- COMPILED ERLANG
+-module(my@mod).
+-compile([no_auto_import, nowarn_ignored, nowarn_unused_vars, nowarn_unused_function, nowarn_nomatch, inline]).
+-export([main/0]).
+
+-spec main() -> integer().
+main() ->
+    A = 1,
+    case <<1, A>> of
+        <<B, 1>> ->
+            B;
+
+        _value ->
+            erlang:error(#{
+                gleam_error => let_assert,
+                message => ~"Pattern match failed, no pattern matched the value.",
+                file => ~"project/test/my/mod.gleam",
+                module => ~"my/mod",
+                function => ~"main",
+                line => 3,
+                value => _value,
+                start => 30,
+                'end' => 60,
+                pattern_start => 41,
+                pattern_end => 49
+            })
+    end.

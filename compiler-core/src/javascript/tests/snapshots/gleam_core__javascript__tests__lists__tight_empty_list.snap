@@ -1,0 +1,18 @@
+---
+source: compiler-core/src/javascript/tests/lists.rs
+expression: "\npub fn go(func) {\n  let huuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuge_variable = []\n}\n"
+---
+----- SOURCE CODE
+
+pub fn go(func) {
+  let huuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuge_variable = []
+}
+
+
+----- COMPILED JAVASCRIPT
+import { List$Empty$const as $List$Empty$const } from "../gleam.mjs";
+
+export function go(func) {
+  let huuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuge_variable = $List$Empty$const;
+  return huuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuge_variable;
+}

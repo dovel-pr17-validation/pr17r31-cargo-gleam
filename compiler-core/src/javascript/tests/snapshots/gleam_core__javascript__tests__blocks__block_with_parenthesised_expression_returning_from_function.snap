@@ -1,0 +1,17 @@
+---
+source: compiler-core/src/javascript/tests/blocks.rs
+expression: "\npub fn b() {\n  {\n    1 + 2\n  }\n}\n"
+---
+----- SOURCE CODE
+
+pub fn b() {
+  {
+    1 + 2
+  }
+}
+
+
+----- COMPILED JAVASCRIPT
+export function b() {
+  return 1 + 2;
+}

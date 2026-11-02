@@ -1,0 +1,27 @@
+---
+source: compiler-core/src/erlang/tests/strings.rs
+expression: "\nfn x() {\n  \"\"\n}\n\npub fn go() {\n  x() <> x()\n}\n"
+---
+----- SOURCE CODE
+
+fn x() {
+  ""
+}
+
+pub fn go() {
+  x() <> x()
+}
+
+
+----- COMPILED ERLANG
+-module(my@mod).
+-compile([no_auto_import, nowarn_ignored, nowarn_unused_vars, nowarn_unused_function, nowarn_nomatch, inline]).
+-export([go/0]).
+
+-spec x() -> binary().
+x() ->
+    ~"".
+
+-spec go() -> binary().
+go() ->
+    <<(x())/binary, (x())/binary>>.

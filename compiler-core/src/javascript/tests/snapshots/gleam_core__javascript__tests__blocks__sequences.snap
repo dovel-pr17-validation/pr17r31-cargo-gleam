@@ -1,0 +1,19 @@
+---
+source: compiler-core/src/javascript/tests/blocks.rs
+expression: "\npub fn go() {\n  \"one\"\n  \"two\"\n  \"three\"\n}\n"
+---
+----- SOURCE CODE
+
+pub fn go() {
+  "one"
+  "two"
+  "three"
+}
+
+
+----- COMPILED JAVASCRIPT
+export function go() {
+  "one";
+  "two";
+  return "three";
+}

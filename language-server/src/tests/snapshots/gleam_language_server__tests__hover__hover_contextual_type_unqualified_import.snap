@@ -1,0 +1,15 @@
+---
+source: language-server/src/tests/hover.rs
+expression: "\nimport wibble/wobble.{type Wibble as Wobble, Wobble}\n"
+---
+
+import wibble/wobble.{type Wibble as Wobble, Wobble}
+                                             ↑▔▔▔▔▔ 
+
+
+----- Hover content (markdown) -----
+```gleam
+Wobble
+```
+
+View on [HexDocs](https://hex.hexdocs.pm/wibble/wobble.html#Wobble)

@@ -1,0 +1,23 @@
+---
+source: compiler-core/src/javascript/tests/lists.rs
+expression: "\npub fn go(x) {\n  []\n  [1]\n  [1, 2]\n  [1, 2, ..x]\n}\n"
+---
+----- SOURCE CODE
+
+pub fn go(x) {
+  []
+  [1]
+  [1, 2]
+  [1, 2, ..x]
+}
+
+
+----- COMPILED JAVASCRIPT
+import { List$Empty$const as $List$Empty$const, prepend as listPrepend } from "../gleam.mjs";
+
+export function go(x) {
+  $List$Empty$const;
+  listPrepend(1, $List$Empty$const);
+  listPrepend(1, listPrepend(2, $List$Empty$const));
+  return listPrepend(1, listPrepend(2, x));
+}

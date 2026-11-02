@@ -1,0 +1,38 @@
+---
+source: compiler-core/src/erlang/tests/let_assert.rs
+expression: "\npub fn unwrap_or_panic(value) {\n  let assert Ok(inner) = value as \"Oops, there was an error\"\n  inner\n}\n"
+---
+----- SOURCE CODE
+
+pub fn unwrap_or_panic(value) {
+  let assert Ok(inner) = value as "Oops, there was an error"
+  inner
+}
+
+
+----- COMPILED ERLANG
+-module(my@mod).
+-compile([no_auto_import, nowarn_ignored, nowarn_unused_vars, nowarn_unused_function, nowarn_nomatch, inline]).
+-export([unwrap_or_panic/1]).
+
+-spec unwrap_or_panic({ok, K} | {error, any()}) -> K.
+unwrap_or_panic(Value) ->
+    case Value of
+        {ok, Inner} ->
+            Inner;
+
+        _value ->
+            erlang:error(#{
+                gleam_error => let_assert,
+                message => ~"Oops, there was an error",
+                file => ~"project/test/my/mod.gleam",
+                module => ~"my/mod",
+                function => ~"unwrap_or_panic",
+                line => 3,
+                value => _value,
+                start => 35,
+                'end' => 63,
+                pattern_start => 46,
+                pattern_end => 55
+            })
+    end.

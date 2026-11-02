@@ -1,0 +1,23 @@
+---
+source: compiler-core/src/erlang/tests.rs
+expression: "pub type Point { Point(x: Int, y: Int) }\npub fn y() { fn() { Point }()(4, 6) }"
+---
+----- SOURCE CODE
+pub type Point { Point(x: Int, y: Int) }
+pub fn y() { fn() { Point }()(4, 6) }
+
+----- COMPILED ERLANG
+-module(my@mod).
+-compile([no_auto_import, nowarn_ignored, nowarn_unused_vars, nowarn_unused_function, nowarn_nomatch, inline]).
+-export([y/0]).
+-export_type([point/0]).
+
+-type point() :: {point, integer(), integer()}.
+
+-spec y() -> point().
+y() ->
+    (fun() ->
+        fun(_value, _value@1) ->
+            {point, _value, _value@1}
+        end
+    end())(4, 6).

@@ -1,0 +1,68 @@
+---
+source: compiler-core/src/javascript/tests/strings.rs
+expression: "\npub fn go(x) {\n  case \"Θ wibble wobble\" {\n    \"Θ\" <> rest -> rest\n    _ -> \"\"\n  }\n  case \"🫥 is neutral dotted\" {\n    \"🫥\" <> rest -> rest\n    _ -> \"\"\n  }\n  case \"🇺🇸 is a cluster\" {\n    \"🇺🇸\" <> rest -> rest\n    _ -> \"\"\n  }\n  case \"\\\" is a an escaped quote\" {\n    \"\\\"\" <> rest -> rest\n    _ -> \"\"\n  }\n  case \"\\\\ is a an escaped backslash\" {\n    \"\\\\\" <> rest -> rest\n    _ -> \"\"\n  }\n}\n"
+---
+----- SOURCE CODE
+
+pub fn go(x) {
+  case "Θ wibble wobble" {
+    "Θ" <> rest -> rest
+    _ -> ""
+  }
+  case "🫥 is neutral dotted" {
+    "🫥" <> rest -> rest
+    _ -> ""
+  }
+  case "🇺🇸 is a cluster" {
+    "🇺🇸" <> rest -> rest
+    _ -> ""
+  }
+  case "\" is a an escaped quote" {
+    "\"" <> rest -> rest
+    _ -> ""
+  }
+  case "\\ is a an escaped backslash" {
+    "\\" <> rest -> rest
+    _ -> ""
+  }
+}
+
+
+----- COMPILED JAVASCRIPT
+export function go(x) {
+  let $ = "Θ wibble wobble";
+  if ($.charCodeAt(0) === 920) {
+    let rest = $.slice(1);
+    rest;
+  } else {
+    "";
+  }
+  let $1 = "🫥 is neutral dotted";
+  if ($1.startsWith("🫥")) {
+    let rest = $1.slice(2);
+    rest;
+  } else {
+    "";
+  }
+  let $2 = "🇺🇸 is a cluster";
+  if ($2.startsWith("🇺🇸")) {
+    let rest = $2.slice(4);
+    rest;
+  } else {
+    "";
+  }
+  let $3 = "\" is a an escaped quote";
+  if ($3.charCodeAt(0) === 34) {
+    let rest = $3.slice(1);
+    rest;
+  } else {
+    "";
+  }
+  let $4 = "\\ is a an escaped backslash";
+  if ($4.charCodeAt(0) === 92) {
+    let rest = $4.slice(1);
+    return rest;
+  } else {
+    return "";
+  }
+}

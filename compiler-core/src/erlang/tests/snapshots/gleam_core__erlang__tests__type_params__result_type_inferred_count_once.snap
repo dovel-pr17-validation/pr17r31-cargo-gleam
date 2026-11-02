@@ -1,0 +1,59 @@
+---
+source: compiler-core/src/erlang/tests/type_params.rs
+expression: "\n        pub fn wibble() {\n            let assert Ok(_) = wobble()\n        }\n\n        pub type Wobble(a) {\n            Wobble\n        }\n\n        pub fn wobble() -> Result(a, Wobble(a)) {\n            todo\n        }\n        "
+---
+----- SOURCE CODE
+
+        pub fn wibble() {
+            let assert Ok(_) = wobble()
+        }
+
+        pub type Wobble(a) {
+            Wobble
+        }
+
+        pub fn wobble() -> Result(a, Wobble(a)) {
+            todo
+        }
+        
+
+----- COMPILED ERLANG
+-module(my@mod).
+-compile([no_auto_import, nowarn_ignored, nowarn_unused_vars, nowarn_unused_function, nowarn_nomatch, inline]).
+-export([wobble/0, wibble/0]).
+-export_type([wobble/1]).
+
+-type wobble(I) :: wobble | {gleam_phantom, I}.
+
+-spec wobble() -> {ok, any()} | {error, wobble(any())}.
+wobble() ->
+    erlang:error(#{
+        gleam_error => todo,
+        message => ~"`todo` expression evaluated. This code has not yet been implemented.",
+        file => ~"project/test/my/mod.gleam",
+        module => ~"my/mod",
+        function => ~"wobble",
+        line => 11
+    }).
+
+-spec wibble() -> {ok, any()} | {error, wobble(any())}.
+wibble() ->
+    case wobble() of
+        {ok, _} = _value ->
+            _value;
+
+        _value@1 ->
+            erlang:error(#{
+                gleam_error => let_assert,
+                message => ~"Pattern match failed, no pattern matched the value.",
+                file => ~"project/test/my/mod.gleam",
+                module => ~"my/mod",
+                function => ~"wibble",
+                line => 3,
+                value => _value@1,
+                start => 39,
+                'end' => 66,
+                pattern_start => 50,
+                pattern_end => 55
+            })
+    end.

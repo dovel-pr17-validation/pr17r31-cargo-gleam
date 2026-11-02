@@ -1,0 +1,36 @@
+---
+source: compiler-core/src/erlang/tests/let_assert.rs
+expression: "pub fn go() {\n  let assert <<a:2, b:3, c:3>> = <<123>>\n  a + b + c\n}"
+---
+----- SOURCE CODE
+pub fn go() {
+  let assert <<a:2, b:3, c:3>> = <<123>>
+  a + b + c
+}
+
+----- COMPILED ERLANG
+-module(my@mod).
+-compile([no_auto_import, nowarn_ignored, nowarn_unused_vars, nowarn_unused_function, nowarn_nomatch, inline]).
+-export([go/0]).
+
+-spec go() -> integer().
+go() ->
+    case <<123>> of
+        <<A:2, B:3, C:3>> ->
+            (A + B) + C;
+
+        _value ->
+            erlang:error(#{
+                gleam_error => let_assert,
+                message => ~"Pattern match failed, no pattern matched the value.",
+                file => ~"project/test/my/mod.gleam",
+                module => ~"my/mod",
+                function => ~"go",
+                line => 2,
+                value => _value,
+                start => 16,
+                'end' => 54,
+                pattern_start => 27,
+                pattern_end => 44
+            })
+    end.

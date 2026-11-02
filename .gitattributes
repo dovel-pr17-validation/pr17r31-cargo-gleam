@@ -1,0 +1,7 @@
+[attr]generated linguist-generated=true diff=generated
+
+# Tests:
+test-package-compiler/src/generated_tests.rs generated
+
+# Lock files:
+Cargo.lock generated

@@ -1,0 +1,17 @@
+---
+source: compiler-core/src/javascript/tests/bit_arrays.rs
+expression: "\npub fn go(x) {\n  <<<<0xAB>>:bits-4>>\n}\n"
+---
+----- SOURCE CODE
+
+pub fn go(x) {
+  <<<<0xAB>>:bits-4>>
+}
+
+
+----- COMPILED JAVASCRIPT
+import { toBitArray, bitArraySlice } from "../gleam.mjs";
+
+export function go(x) {
+  return toBitArray([bitArraySlice(toBitArray([171]), 0, 4)]);
+}

@@ -1,0 +1,39 @@
+---
+source: compiler-core/src/erlang/tests/let_assert.rs
+expression: "\npub fn main() {\n  let assert <<3.14 as pi:float>> = <<3.14>>\n  pi\n}\n"
+---
+----- SOURCE CODE
+
+pub fn main() {
+  let assert <<3.14 as pi:float>> = <<3.14>>
+  pi
+}
+
+
+----- COMPILED ERLANG
+-module(my@mod).
+-compile([no_auto_import, nowarn_ignored, nowarn_unused_vars, nowarn_unused_function, nowarn_nomatch, inline]).
+-export([main/0]).
+
+-spec main() -> float().
+main() ->
+    case <<3.14/float>> of
+        <<3.14/float>> ->
+            Pi = 3.14,
+            Pi;
+
+        _value ->
+            erlang:error(#{
+                gleam_error => let_assert,
+                message => ~"Pattern match failed, no pattern matched the value.",
+                file => ~"project/test/my/mod.gleam",
+                module => ~"my/mod",
+                function => ~"main",
+                line => 3,
+                value => _value,
+                start => 19,
+                'end' => 61,
+                pattern_start => 30,
+                pattern_end => 50
+            })
+    end.

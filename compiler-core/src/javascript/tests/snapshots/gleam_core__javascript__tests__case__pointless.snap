@@ -1,0 +1,17 @@
+---
+source: compiler-core/src/javascript/tests/case.rs
+expression: "\npub fn go(x) {\n  case x {\n    _ -> x\n  }\n}\n"
+---
+----- SOURCE CODE
+
+pub fn go(x) {
+  case x {
+    _ -> x
+  }
+}
+
+
+----- COMPILED JAVASCRIPT
+export function go(x) {
+  return x;
+}

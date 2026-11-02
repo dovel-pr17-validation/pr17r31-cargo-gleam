@@ -1,0 +1,17 @@
+---
+source: compiler-core/src/javascript/tests/bit_arrays.rs
+expression: "\npub fn go(i: Int) {\n  <<i:size(32)>>\n}\n"
+---
+----- SOURCE CODE
+
+pub fn go(i: Int) {
+  <<i:size(32)>>
+}
+
+
+----- COMPILED JAVASCRIPT
+import { toBitArray, sizedInt } from "../gleam.mjs";
+
+export function go(i) {
+  return toBitArray([sizedInt(i, 32, true)]);
+}

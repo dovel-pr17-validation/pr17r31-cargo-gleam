@@ -1,0 +1,29 @@
+---
+source: compiler-core/src/erlang/tests/strings.rs
+expression: "\nconst cs = s\n\nfn s() {\n  \"s\"\n}\n\npub fn go() {\n  cs() <> cs()\n}\n"
+---
+----- SOURCE CODE
+
+const cs = s
+
+fn s() {
+  "s"
+}
+
+pub fn go() {
+  cs() <> cs()
+}
+
+
+----- COMPILED ERLANG
+-module(my@mod).
+-compile([no_auto_import, nowarn_ignored, nowarn_unused_vars, nowarn_unused_function, nowarn_nomatch, inline]).
+-export([go/0]).
+
+-spec s() -> binary().
+s() ->
+    ~"s".
+
+-spec go() -> binary().
+go() ->
+    <<(s())/binary, (s())/binary>>.

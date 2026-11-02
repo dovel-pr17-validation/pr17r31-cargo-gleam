@@ -1,0 +1,47 @@
+---
+source: compiler-core/src/javascript/tests/functions.rs
+expression: "\npub type Function(a) {\n  Function(fn() -> a)\n}\n\npub fn main() {\n  [fn() { 1 } |> Function, fn() { 2 } |> Function]\n}\n"
+---
+----- SOURCE CODE
+
+pub type Function(a) {
+  Function(fn() -> a)
+}
+
+pub fn main() {
+  [fn() { 1 } |> Function, fn() { 2 } |> Function]
+}
+
+
+----- COMPILED JAVASCRIPT
+import {
+  List$Empty$const as $List$Empty$const,
+  prepend as listPrepend,
+  CustomType as $CustomType,
+} from "../gleam.mjs";
+
+export class Function extends $CustomType {
+  constructor($0) {
+    super();
+    this[0] = $0;
+  }
+}
+export const Function$Function = ($0) => new Function($0);
+export const Function$isFunction = (value) => value instanceof Function;
+export const Function$Function$0 = (value) => value[0];
+
+export function main() {
+  return listPrepend(
+    (() => {
+      let _pipe = () => { return 1; };
+      return new Function(_pipe);
+    })(),
+    listPrepend(
+      (() => {
+        let _pipe = () => { return 2; };
+        return new Function(_pipe);
+      })(),
+      $List$Empty$const,
+    ),
+  );
+}

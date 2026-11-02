@@ -1,0 +1,14 @@
+---
+source: compiler-core/src/javascript/tests/consts.rs
+expression: "pub const a = [1, 2, 3]"
+---
+----- SOURCE CODE
+pub const a = [1, 2, 3]
+
+----- COMPILED JAVASCRIPT
+import { List$Empty$const as $List$Empty$const, prepend as listPrepend } from "../gleam.mjs";
+
+export const a = /* @__PURE__ */ listPrepend(
+  1,
+  listPrepend(2, listPrepend(3, $List$Empty$const)),
+);

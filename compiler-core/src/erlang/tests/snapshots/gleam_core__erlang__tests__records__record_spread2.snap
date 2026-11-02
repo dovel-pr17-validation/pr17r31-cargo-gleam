@@ -1,0 +1,30 @@
+---
+source: compiler-core/src/erlang/tests/records.rs
+expression: "\npub type Triple {\n  Triple(a: Int, b: Int, c: Int)\n}\n\npub fn main() {\n  let triple = Triple(1,2,3)\n  let Triple(the_a, c: the_c, ..) = triple\n  the_c\n}\n"
+---
+----- SOURCE CODE
+
+pub type Triple {
+  Triple(a: Int, b: Int, c: Int)
+}
+
+pub fn main() {
+  let triple = Triple(1,2,3)
+  let Triple(the_a, c: the_c, ..) = triple
+  the_c
+}
+
+
+----- COMPILED ERLANG
+-module(my@mod).
+-compile([no_auto_import, nowarn_ignored, nowarn_unused_vars, nowarn_unused_function, nowarn_nomatch, inline]).
+-export([main/0]).
+-export_type([triple/0]).
+
+-type triple() :: {triple, integer(), integer(), integer()}.
+
+-spec main() -> integer().
+main() ->
+    Triple = {triple, 1, 2, 3},
+    {triple, The_a, _, The_c} = Triple,
+    The_c.

@@ -1,0 +1,19 @@
+---
+source: compiler-core/src/javascript/tests/bools.rs
+expression: "\npub fn go() {\n    True\n    False\n    Nil\n}\n"
+---
+----- SOURCE CODE
+
+pub fn go() {
+    True
+    False
+    Nil
+}
+
+
+----- COMPILED JAVASCRIPT
+export function go() {
+  true;
+  false;
+  return undefined;
+}

@@ -1,0 +1,21 @@
+---
+source: compiler-core/src/javascript/tests/blocks.rs
+expression: "\npub fn go() {\n  let x = {\n    {\n      3\n    }\n  }\n  x\n}\n"
+---
+----- SOURCE CODE
+
+pub fn go() {
+  let x = {
+    {
+      3
+    }
+  }
+  x
+}
+
+
+----- COMPILED JAVASCRIPT
+export function go() {
+  let x = 3;
+  return x;
+}

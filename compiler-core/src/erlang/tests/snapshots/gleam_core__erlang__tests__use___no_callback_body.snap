@@ -1,0 +1,32 @@
+---
+source: compiler-core/src/erlang/tests/use_.rs
+expression: "\npub fn main() {\n  let thingy = fn(f) { f() }\n  use <- thingy()\n}\n"
+---
+----- SOURCE CODE
+
+pub fn main() {
+  let thingy = fn(f) { f() }
+  use <- thingy()
+}
+
+
+----- COMPILED ERLANG
+-module(my@mod).
+-compile([no_auto_import, nowarn_ignored, nowarn_unused_vars, nowarn_unused_function, nowarn_nomatch, inline]).
+-export([main/0]).
+
+-spec main() -> any().
+main() ->
+    Thingy = fun(F) ->
+        F()
+    end,
+    Thingy(fun() ->
+        erlang:error(#{
+            gleam_error => todo,
+            message => ~"`todo` expression evaluated. This code has not yet been implemented.",
+            file => ~"project/test/my/mod.gleam",
+            module => ~"my/mod",
+            function => ~"main",
+            line => 4
+        })
+    end).
