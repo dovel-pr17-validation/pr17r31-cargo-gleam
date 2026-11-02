@@ -74,7 +74,7 @@ pretty_assertions = "1"
 insta = { version = "1", features = ["glob"] }
 # A transitive dependency needed to compile into wasm32-unknown-unknown
 # See https://docs.rs/getrandom/latest/getrandom/index.html#webassembly-support
-getrandom = { version = "0.2", features = ["js"] }
+getrandom = { version = "0.2.17", features = ["js"] }
 # Non-empty vectors
 vec1 = "1"
 # Pubgrub dependency resolution algorithm
